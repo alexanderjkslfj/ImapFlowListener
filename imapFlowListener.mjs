@@ -51,6 +51,9 @@ export function onMail(auth, callback, refreshDelay = 1000) {
                 await client.messageFlagsAdd(message[0], ["\\Seen"], { uid: true })
 
                 // decoded body parts
+                /**
+                 * @type string[]
+                 */
                 const texts = []
                 data.bodyParts.forEach((value, index) => {
                     texts.push(decoder.decode(Buffer.from(decoder.decode(value), getEncoding(message[2]?.[index] || "base64"))))
