@@ -5,7 +5,7 @@ import { ImapFlow } from 'imapflow';
  * Calls the callback once per mail.
  * Passes the envelope and an array of the body parts to the callback.
  * @param {{host:string,username:string,password:string}} auth login information of email client
- * @param {CallableFunction} callback called once per received mail
+ * @param {(envelope: import("imapflow").MessageEnvelopeObject, bodyParts: string[]) => any} callback called once per received mail
  * @param {number} refreshDelay delay in ms between email pulls
  * @returns {never} never
  */
@@ -70,7 +70,7 @@ export function onMail(auth, callback, refreshDelay = 1000) {
 /**
  * Use regex to extract an encoding string usable by Buffer.from from a given string
  * @param {string} string string to extract encoding from
- * @returns encoding usable by Buffer.from - defaults to utf8
+ * @returns {string} encoding usable by Buffer.from - defaults to utf8
  */
 function getEncoding(string) {
     if (string.match(/b.*64.*url/)) return "base64url"
@@ -86,8 +86,8 @@ function getEncoding(string) {
 const AsyncFunction = (async () => { }).constructor
 /**
  * Aquire mailbox lock, execute callback, then release mailbox lock. Exception safe.
- * @param {MailClient} client 
- * @param {CallableFunction} callback the mailclient is passed to the callback
+ * @param {ImapFlow} client 
+ * @param {(client: ImapFlow) => any} callback the mailclient is passed to the callback
  * @returns {Promise<void>} returns after callback finished
  */
 async function withLock(client, callback) {
@@ -133,15 +133,12 @@ async function withLock(client, callback) {
  * MailClient is passed to callback.
  * Automatically releases lock and logs out client after callback finishes.
  * @param {{host:string,username:string,password:string}} auth 
- * @param {CallableFunction} callback 
+ * @param {(client: ImapFlow) => any} callback 
  * @returns {Promise<void>} returns after callback finished
  */
 async function connectMail(auth, callback) {
 
     // create email client
-    /**
-     * @type MailClient
-     */
     const client = new ImapFlow({
         host: auth.host,
         port: 993,
