@@ -1,8 +1,8 @@
 # ImapFlowListener
 
-Library for continuously listening for new emails using IMAP.
+Node.js library for continuously listening for new emails using IMAP.
 
-Uses [ImapFlow](https://www.npmjs.com/package/imapflow) as a dependency.
+Uses [ImapFlow](https://www.npmjs.com/package/imapflow) and [node-fetch](https://www.npmjs.com/package/node-fetch) as dependencies.
 
 ### Usage
 ```javascript
